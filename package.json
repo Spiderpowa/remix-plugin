@@ -1,5 +1,5 @@
 {
-  "name": "remix-plugin",
+  "name": "@jim2212001/remix-plugin",
   "version": "0.0.2-alpha.10",
   "description": "Ethereum IDE and tools for the web",
   "contributors": [
@@ -32,7 +32,7 @@
     "serve:ethdoc": "cd ./examples/plugins/ethdoc && webpack-dev-server --config webpack.dev.js",
     "build:ethdoc": "cd ./examples/plugins/ethdoc && webpack --config webpack.prod.js",
     "deploy:ethdoc": "surge ./examples/plugins/ethdoc/dist remix-ethdoc-plugin.surge.sh",
-    "deploy:etherscan": "surge ./examples/plugins/etherscan remix-etherscan-plugin.surge.sh"
+    "deploy:etherscan": "surge ./examples/plugins/etherscan remix-tangerine-garden-plugin.surge.sh"
   },
   "dependencies": {
     "events": "^3.0.0"
