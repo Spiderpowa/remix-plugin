@@ -33,7 +33,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="index.css"/>
-  <title>Etherscan Verify Plugin</title>
+  <title>Tangerine Garden Verify Plugin</title>
 </head>
 
 <body>
@@ -43,10 +43,12 @@
     </label>
     
     <div class="form-group">
+        <!--
       <label for="apikey">API key</label>
       <input class="form-control" type="text" id="apikey" placeholder="apikey" />
       <button onclick="saveAPIkey()" class="btn btn-sm btn-primary" id="apikeysave" placeholder="apikey" >Save API key</button>
     </div>
+        -->
 
     <div class="form-group">
       <label for="verifycontractname">Contract Name</label>
@@ -54,8 +56,8 @@
     </div>
   
     <div class="form-group">
-      <label for="verifycontractarguments">Constructor Arguments</label>
-      <input class="form-control" type="text" id="verifycontractarguments" placeholder="hex encoded" />
+      <label for="verifycontractarguments">Constructor Arguments(Not supported yet)</label>
+      <input disabled="disabled" class="form-control" type="text" id="verifycontractarguments" placeholder="hex encoded" />
     </div>
   
     <div class="form-group">
@@ -70,7 +72,7 @@
 
   
 
-  <script src="https://unpkg.com/remix-plugin"></script>
+  <script src="https://unpkg.com/@jim2212001/plugin@0.1.16-r4"></script>
   <script src="index.js"></script>
 </body>
 

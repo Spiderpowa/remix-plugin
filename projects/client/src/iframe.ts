@@ -4,7 +4,7 @@ import { getApiMap, listenOnThemeChanged } from './api'
 
 /** Fetch the default origins for remix */
 export async function getDefaultOrigins() {
-  const res = await fetch('https://raw.githubusercontent.com/ethereum/remix-plugin/master/projects/client/assets/origins.json')
+  const res = await fetch('https://raw.githubusercontent.com/Spiderpowa/remix-plugin/master/projects/client/assets/origins.json')
   return res.json()
 }
 

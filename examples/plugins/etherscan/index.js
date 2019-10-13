@@ -41,42 +41,45 @@ async function getResult() {
 async function verify(compilationResult, address, fileName) {
   const network = await getNetworkName()
   const etherscanApi = (network === 'main')
-      ? `https://api.etherscan.io/api`
-      : `https://api-${network}.etherscan.io/api`
+      ? `https://api-testnet.tangerine.garden/v1/contracts/verify`
+      : `https://api-${network}.tangerine.garden/v1/contracts/verify`
 
   const name = document.getElementById('verifycontractname').value
   let contractMetadata = compilationResult.data.contracts[fileName][name]['metadata']
   contractMetadata = JSON.parse(contractMetadata)
+  /*
   const ctrArgument = document.getElementById('verifycontractarguments').value ?
   document.getElementById('verifycontractarguments').value.replace('0x', '') : ''
-  const data = {
-    apikey: apikey, //A valid API-Key is required
-    module: 'contract', //Do not change
-    action: 'verifysourcecode', //Do not change
-    contractaddress: address, //Contract Address starts with 0x...
-    sourceCode: compilationResult.source.sources[fileName].content, //Contract Source Code (Flattened if necessary)
-    contractname: name, //ContractName
-    compilerversion: `v${contractMetadata.compiler.version}`, // see http://etherscan.io/solcversions for list of support versions
-    optimizationUsed: contractMetadata.settings.optimizer.enabled ? 1 : 0, //0 = Optimization used, 1 = No Optimization
-    runs: contractMetadata.settings.optimizer.runs, //set to 200 as default unless otherwise
-    constructorArguements: ctrArgument, //if applicable
+  */
+  const compiler = contractMetadata.compiler.version.split('+commit.')
+  if (compiler[0].indexOf('v0.4.') === 0 || compiler[0].indexOf('v0.5.0') === 0) {
+    compiler[1] = 'release'
   }
-  const body = new FormData()
-  Object.keys(data).forEach(key => body.append(key, data[key]))
+  const data = {
+    contract_address: address, //Contract Address starts with 0x...
+    source: compilationResult.source.sources[fileName].content, //Contract Source Code (Flattened if necessary)
+    contract_name: name, //ContractName
+    compiler: `v${compiler[0]}+${compiler[1]}`, // see http://etherscan.io/solcversions for list of support versions
+    optimization: contractMetadata.settings.optimizer.enabled ? true : false, //0 = Optimization used, 1 = No Optimization
+    runs: contractMetadata.settings.optimizer.runs, //set to 200 as default unless otherwise
+    //constructorArguements: ctrArgument, //if applicable
+  }
 
   try {
     client.emit('statusChanged', { key: 'loading', type: 'info', title: 'Verifying ...' })
-    const response = await fetch(etherscanApi, { method: 'POST', body })
-    const { message, result, status } = await response.json()
-    if (message === 'OK' && status === '1') {
-      checkValidation(etherscanApi, result)
+    const response = await fetch(etherscanApi, { method: 'POST', body: JSON.stringify(data) })
+    const result = await response.json()
+    let msg = ''
+    if (result.success) {
+      msg = 'Success'
+      // checkValidation(etherscanApi, result)
       scheduleResetStatus()
-    }
-    if (message === 'NOTOK') {
+    } else {
+      msg = result.error.error_code
       client.emit('statusChanged', { key: 'failed', type: 'error', title: result })
       scheduleResetStatus()
     }
-    return result
+    return msg
   } catch (error) {
     document.querySelector('div#results').innerText = error
   }
